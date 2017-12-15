@@ -37,13 +37,33 @@ export default class Cell {
     return Math.floor(colorRadius / 3.5 * (maxRadius - minRadius) + minRadius);
   };
 
+  generatePosition = r => {
+    const minDistance = r + this.r;
+    const maxDistance = minDistance * 1.5;
+    const avgDistance = (minDistance + maxDistance) / 2;
+    const variance = (minDistance / 2) ** 2;
+
+    const distribution = gaussian(avgDistance, variance);
+    const distance = distribution.ppf(Math.random());
+
+    const angle = Math.floor(Math.random() * 360);
+    const x = distance * Math.cos(angle);
+    const y = distance * Math.sin(angle);
+
+    return {
+      cx: this.cx + x,
+      cy: this.cy + y
+    };
+  };
+
   divideCell = () => {
     const colorArray = this.generateColorArray(this.colorArray);
-    const r = this.generateRadius(colorArray, 3, 40);
+    const r = this.generateRadius(colorArray, 3, 25);
+    const { cx, cy } = this.generatePosition(r);
 
     return new Cell({
-      cx: this.cx + 30,
-      cy: this.cy + 30,
+      cx,
+      cy,
       r,
       colorArray,
       stroke: this.stroke,
