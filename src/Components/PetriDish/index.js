@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import CellSvg from "../CellSvg";
 import Cell from "./Cell";
+import Edge from "./Edge";
 
 // hold all cell info in PetriDish
 
@@ -17,12 +18,13 @@ const initCell = new Cell({
 class PetriDish extends Component {
   state = {
     cells: [initCell],
+    edges: [],
     height: 500,
     width: 500
   };
 
   divideCells = () => {
-    const { cells } = this.state;
+    const { cells, edges } = this.state;
     const cellNum = cells.length;
     let newCell;
 
@@ -32,12 +34,21 @@ class PetriDish extends Component {
         this.isCellInsidePetriDish(newCell) &&
         !this.isCellOverlappingOtherCells(newCell)
       ) {
+        edges.push(
+          new Edge({
+            x1: cells[i].cx,
+            y1: cells[i].cy,
+            x2: newCell.cx,
+            y2: newCell.cy
+          })
+        );
         cells.push(newCell);
       }
     }
 
     this.setState({
-      cells: [...cells]
+      cells: [...cells],
+      edges: [...edges]
     });
   };
 
@@ -73,6 +84,23 @@ class PetriDish extends Component {
       );
     });
 
+  generateSvgEdges = () => {
+    return this.state.edges.map(edge => {
+      const { x1, y1, x2, y2, id } = edge;
+      return (
+        <line
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
+          stroke={"rgb(0, 0, 0)"}
+          strokeWidth={"2"}
+          key={id}
+        />
+      );
+    });
+  };
+
   render() {
     return (
       <svg
@@ -82,6 +110,7 @@ class PetriDish extends Component {
         viewBox={`0 0 ${this.state.width} ${this.state.height}`}
         xmlns="http://www.w3.org/2000/svg"
       >
+        {this.generateSvgEdges()}
         {this.generateSvgCells()}
       </svg>
     );
