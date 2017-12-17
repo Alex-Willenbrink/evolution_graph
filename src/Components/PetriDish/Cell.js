@@ -58,7 +58,7 @@ export default class Cell {
 
   divideCell = () => {
     const colorArray = this.generateColorArray(this.colorArray);
-    const r = this.generateRadius(colorArray, 3, 25);
+    const r = this.generateRadius(colorArray, 2, 5);
     const { cx, cy } = this.generatePosition(r);
 
     return new Cell({
