@@ -34,7 +34,7 @@ export default class Cell {
     const colorRadius =
       colorArray.reduce((sum, colorValue) => (sum += colorValue), 0) +
       Math.random() / 2;
-    return Math.floor(colorRadius / 3.5 * (maxRadius - minRadius) + minRadius);
+    return colorRadius / 3.5 * (maxRadius - minRadius) + minRadius;
   };
 
   generatePosition = r => {
@@ -58,7 +58,7 @@ export default class Cell {
 
   divideCell = () => {
     const colorArray = this.generateColorArray(this.colorArray);
-    const r = this.generateRadius(colorArray, 2, 5);
+    const r = this.generateRadius(colorArray, 0.5, 1.5);
     const { cx, cy } = this.generatePosition(r);
 
     return new Cell({
