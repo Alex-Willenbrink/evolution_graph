@@ -10,6 +10,8 @@ export default class Cell {
     this.stroke = stroke;
     this.strokeWidth = strokeWidth;
     this.fill = this.colorArrayToRgb(colorArray);
+    this.divAttempts = 0;
+    this.divAngle = this.generateAngle();
     this.id = shortId.generate();
   }
 
@@ -37,6 +39,8 @@ export default class Cell {
     return colorRadius / 3.5 * (maxRadius - minRadius) + minRadius;
   };
 
+  generateAngle = () => Math.floor(Math.random() * 360);
+
   generatePosition = r => {
     const minDistance = r + this.r;
     const maxDistance = minDistance * 1.5;
@@ -46,9 +50,8 @@ export default class Cell {
     const distribution = gaussian(avgDistance, variance);
     const distance = distribution.ppf(Math.random());
 
-    const angle = Math.floor(Math.random() * 360);
-    const x = distance * Math.cos(angle);
-    const y = distance * Math.sin(angle);
+    const x = distance * Math.cos(this.divAngle);
+    const y = distance * Math.sin(this.divAngle);
 
     return {
       cx: this.cx + x,
@@ -57,6 +60,9 @@ export default class Cell {
   };
 
   divideCell = () => {
+    this.divAngle += 20;
+    this.divAttempts++;
+
     const colorArray = this.generateColorArray(this.colorArray);
     const r = this.generateRadius(colorArray, 0.5, 1.5);
     const { cx, cy } = this.generatePosition(r);
