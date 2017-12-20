@@ -64,7 +64,7 @@ export default class Cell {
     this.divAttempts++;
 
     const colorArray = this.generateColorArray(this.colorArray);
-    const r = this.generateRadius(colorArray, 0.5, 1.5);
+    const r = this.generateRadius(colorArray, 0.4, 1.6);
     const { cx, cy } = this.generatePosition(r);
 
     return new Cell({
